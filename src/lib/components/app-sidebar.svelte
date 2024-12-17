@@ -19,17 +19,12 @@
   }[];
   // sample data
   const data = {
-    versions: ["SalesSpaice", "private", "Ackspace"],
+    versions: ["Devii.io"],
     navMain: [
       {
         title: "Events Overview",
-        url: "#",
+        url: "/",
         icon: Command,
-      },
-      {
-        title: "Your Network",
-        url: "#",
-        icon: Users,
       },
     ],
   };
@@ -64,10 +59,12 @@
         {#each items as mainItem (mainItem.title)}
           <Sidebar.MenuItem>
             <Sidebar.MenuButton>
-              {#if mainItem.icon}
-                <mainItem.icon />
-              {/if}
-              <span>{mainItem.title}</span>
+              <a href={mainItem.url} class="flex items-center gap-2">
+                {#if mainItem.icon}
+                  <mainItem.icon />
+                {/if}
+                <span>{mainItem.title}</span>
+              </a>
             </Sidebar.MenuButton>
           </Sidebar.MenuItem>
         {/each}

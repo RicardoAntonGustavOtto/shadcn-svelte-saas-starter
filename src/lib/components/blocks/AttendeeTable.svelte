@@ -9,14 +9,15 @@
   import PencilIcon from "lucide-svelte/icons/pencil";
   import TrashIcon from "lucide-svelte/icons/trash";
   import CalendarIcon from "lucide-svelte/icons/calendar-days";
+  import { goto } from "$app/navigation";
 
   let attendees = [
     {
       id: 1,
       avatar: "https://api.dicebear.com/7.x/lorelei/svg?seed=1",
-      name: "Ricardo Otto",
-      email: "ricardo@salesspaice.com",
-      company: "SalesSpaice GmbH",
+      name: "John Meyer",
+      email: "johnmeyer@meyertech.com",
+      company: "MeyerTech",
       role: "Chief Technology Officer",
       status: "meeting planned",
     },
@@ -119,10 +120,7 @@
   };
 </script>
 
-<div
-  class="flex flex-col justify-center items-center min-h-[90vh]"
-  style="min-width: 1250px;"
->
+<div class="flex flex-col min-h-[90vh] p-8 pt-0 w-full" style="">
   <div
     class="flex flex-col items-center justify-center bg-white rounded-xl p-8 pt-4 gap-4"
   >
@@ -141,8 +139,7 @@
 
     <!-- Table -->
     <div
-      class="min-w-2xl border border-2 border-slate-100 rounded-xl padding bg-white"
-      style="min-width: 1200px;"
+      class=" border border-2 border-slate-100 rounded-xl padding bg-white w-full"
     >
       <Table.Root>
         <Table.Header>
@@ -168,7 +165,11 @@
 
         <Table.Body>
           {#each attendees as attendee}
-            <Table.Row>
+            <Table.Row
+              onclick={() => {
+                goto(`/prospect/${attendee.id}`);
+              }}
+            >
               <Table.Cell class="font-medium border-r border-slate-100">
                 <div class="flex items-center gap-2">
                   <img src={attendee.avatar} alt="user" class="w-8" />

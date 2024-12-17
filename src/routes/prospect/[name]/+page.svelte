@@ -1,5 +1,5 @@
 <!-- @format -->
-<script>
+<script lang="ts">
   import { Card } from "$lib/components/ui/card";
   import {
     Dialog,
@@ -16,6 +16,35 @@
   import DollarSignIcon from "lucide-svelte/icons/dollar-sign";
   import { Button } from "$lib/components/ui/button";
   import { marked } from "marked";
+
+  import NotebookPen from "lucide-svelte/icons/notebook-pen";
+  import Mic from "lucide-svelte/icons/mic";
+
+  import { writable } from "svelte/store";
+
+  interface Note {
+    id: number;
+    text: string;
+    date: string;
+    author: string;
+  }
+
+  const newNote = writable("");
+
+  let notes: Note[] = [
+    {
+      id: 1,
+      text: "Initial meeting went well - showed strong interest in API capabilities",
+      date: "2024-01-15",
+      author: "Ryan",
+    },
+    {
+      id: 2,
+      text: "Follow up call scheduled for next week to discuss technical requirements",
+      date: "2024-01-18",
+      author: "Sarah",
+    },
+  ];
 
   const meetings = [
     {
@@ -234,6 +263,68 @@
 
 <!-- Prospect Profile and Opportunities -->
 <div class="space-y-6 p-6">
+  <Dialog>
+    <DialogTrigger>
+      <Button variant="ghost" size="icon" class="">
+        <NotebookPen class="h-5 w-5" />
+      </Button>
+    </DialogTrigger>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>Prospect Notes</DialogTitle>
+      </DialogHeader>
+
+      <div class="space-y-4">
+        <form
+          class="flex gap-2"
+          on:submit|preventDefault={() => {
+            if ($newNote) {
+              notes = [
+                ...notes,
+                {
+                  id: notes.length + 1,
+                  text: $newNote,
+                  author: "You",
+                  date: new Date().toLocaleDateString(),
+                },
+              ];
+              newNote.set("");
+            }
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Add a note..."
+            class="flex-1 rounded-md border border-gray-300 px-3 py-2"
+            bind:value={$newNote}
+          />
+          <button class="rounded-full p-2 hover:bg-gray-100">
+            <Mic class="h-5 w-5" />
+          </button>
+        </form>
+
+        <div class="space-y-3">
+          {#if notes}
+            {#each notes as note}
+              <div class="rounded-lg border border-gray-200 p-3">
+                <p class="text-sm">{note.text}</p>
+                <div
+                  class="flex justify-between items-center mt-2 text-xs text-gray-500"
+                >
+                  <span>{note.author}</span>
+                  <span>{note.date}</span>
+                </div>
+              </div>
+            {/each}
+          {:else}
+            <div class="text-center text-gray-500 py-4">
+              No notes yet. Add your first note above.
+            </div>
+          {/if}
+        </div>
+      </div>
+    </DialogContent>
+  </Dialog>
   <div class="grid grid-cols-2 gap-6">
     <!-- Prospect Profile Card -->
     <Card class="p-4">
